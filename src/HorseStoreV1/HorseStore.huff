@@ -1,0 +1,63 @@
+/* Intefaces*/
+
+#define function updateHorseNumber(uint256) nonpayable returns()
+#define function readNumberOfHorses() view returns(uint256)
+
+#define constant HORSE_NUMBER_SLOT = FREE_STORAGE_POINTER()
+
+
+#define macro MAIN() = takes(0) returns(0) {
+     //function dispatch
+    0x00 calldataload 0xE0 shr
+   
+    
+    dup1
+    __FUNC_SIG(updateHorseNumber)
+    eq
+    updatejump  
+    jumpi 
+
+    __FUNC_SIG(readNumberOfHorses)
+    eq
+
+    readjump
+    jumpi
+
+    0x00 0x00 revert
+
+    updatejump:
+        SET_HORSE_NUMBER()
+
+    readjump:
+        READ_HORSE_NUMBER()
+
+
+
+
+}
+
+#define macro SET_HORSE_NUMBER() = takes(0) returns(0) {
+    //Get the calldata value
+    0x04
+    calldataload
+    //Get the storage slot 
+    [HORSE_NUMBER_SLOT]
+
+    //sstore the value
+    sstore
+
+    stop
+}
+
+#define macro READ_HORSE_NUMBER() = takes(0) returns(0) {
+    // Get the storage slot
+    [HORSE_NUMBER_SLOT]
+    //Read the value from slot
+    sload
+    //load value into memory
+    0x00 
+
+    mstore
+    //return memory value
+    0x20 0x00 return
+}

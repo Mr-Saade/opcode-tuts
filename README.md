@@ -1,66 +1,16 @@
-## Foundry
+# Huff Storage Contract: Solidity vs Huff
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project compares a simple storage contract implemented in **Solidity** and **Huff** (EVM low-level language). The goal is to explore the gas efficiency and low-level mechanics of Huff while ensuring the functionality matches that of the Solidity contract through a **differential test**.
 
-Foundry consists of:
+## Key Insights
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **Gas Efficiency**: Huff provides more control over memory and storage. In contrast, Solidity handles these operations and does some extra prechecks automatically like checking if some eth was sent along with the contract deployment, initializing the free memory pointer, amongst others, leading to additional overhead but improved security.
+- **Function Dispatch**: In Huff, you must manually implement function dispatch, while Solidity handles this behind the scenes, offering greater abstraction and security at the cost of lower control.
 
-## Documentation
+## Differential Test
 
-https://book.getfoundry.sh/
+The test verifies that both Solidity and Huff contracts behave identically by:
 
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Deploying both contracts.
+Updating the stored number in both.
+Verifying that both return the same value.
